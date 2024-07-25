@@ -19,7 +19,7 @@ app.post('/tasks', (req, res) => {
   res.status(201).send({data : newTodo ,message :"Record inserted Sucessfully"});
 });
 
-// Update a todo
+// Update a todo/
 app.put('/tasks/:id', (req, res) => {
 //   const { id } = req.params;
 //   const updatedTodo = req.body;
