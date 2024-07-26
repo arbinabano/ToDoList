@@ -1,17 +1,25 @@
 import logo from './logo.svg';
 import './App.css';
-import { Container } from 'react-bootstrap';
+import { Container ,Button } from 'react-bootstrap';
 import TaskForm from "./Components/TaskForm"
+import TaskList from './Components/TaskList';
+import { useState } from 'react';
 function App() {
+  
+  
+  const [isAdd,setIsAdd]=useState(false);
   return (
-    // <div className="App">
-    //   <TaskForm/>
-    //  TaskList
-    // </div>
+   <>
+    {/* <TaskForm/> */}
+   
+    {/* <TaskList/> */}
+   {isAdd ? (<TaskForm setIsAdd={setIsAdd}/>) : (
     <Container>
-      <h1> hellow </h1>
-    <TaskForm/>
-    </Container>
+     <Button variant="primary" className="mr-2" onClick={()=>setIsAdd(true)}>Add +</Button>
+     
+    <TaskList/>
+    </Container>)}
+    </>
   );
 }
 

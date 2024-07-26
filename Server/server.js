@@ -1,47 +1,53 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = 5000;
 
 let tasks = [];
 
+app.use(cors()); // Add this line before your routes
 app.use(express.json());
 
 // Get all tasks
 app.get('/tasks', (req, res) => {
-  res.send({Body :tasks ,message:"All Record Found"});
+  res.send({ data: tasks, message: "All records found" });
 });
 
 // Add a todo
 app.post('/tasks', (req, res) => {
-  console.log("req.body :",req.body);
-  const newTodo ={ id: tasks.length + 1, content: req.body.content ,completed:false};
+
+  const newTodo = { id: tasks.length + 1, content: req.body.content, completed:  req.body.isCheck };
   tasks.push(newTodo);
-  res.status(201).send({data : newTodo ,message :"Record inserted Sucessfully"});
+  res.status(201).send({ data: newTodo, message: "Record inserted successfully" });
 });
 
-// Update a todo/
+// Update a todo
 app.put('/tasks/:id', (req, res) => {
-//   const { id } = req.params;
-//   const updatedTodo = req.body;
-//   tasks = tasks.map(todo => (todo.id === id ? updatedTodo : todo));
-//   res.json(updatedTodo);
-const task = task.find(t => t.id ===parseInt(req.params.id));
-if (!task)    return res.status(400).send("Task Not Found!")
-task.content=req.bosy.content ;
-task.completed ==req.bosy.completed;
-res.send({data : task ,message:"Record updated Successfully"})
+  const id = parseInt(req.params.id);
+  const task = tasks.find(t => t.id === id);
+
+  if (!task) {
+    return res.status(404).send("Task Not Found!");
+  }
+
+  // Update task properties
+  task.content = req.body.content;
+  task.completed = req.body.completed;
+
+  res.send({ data: task, message: "Record updated successfully" });
 });
 
 // Delete a todo
 app.delete('/tasks/:id', (req, res) => {
-//   const { id } = req.params;
-//   tasks = tasks.filter(todo => todo.id !== id);
-//   res.status(204).end();
+  const id = parseInt(req.params.id);
+  const index = tasks.findIndex(t => t.id === id);
 
-const task = task.findIndex(t => t.id ===parseInt(req.params.id));
-if (task === -1)    return res.status(400).send("Task Not Found!")
- tasks.splice(task,1)
-res.send({message:"Record Deleted Successfully"})
+  if (index === -1) {
+    return res.status(404).send("Task Not Found!");
+  }
+
+  tasks.splice(index, 1);
+  res.send({ message: "Record deleted successfully" });
 });
 
 app.listen(PORT, () => {
